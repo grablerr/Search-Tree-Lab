@@ -5,14 +5,13 @@ using namespace tree;
 
 int main(){
 
-	Node a(2);
-	Node l(1);
-	Node r(3);
-	a._left = &l;
-	a._right = &r;
-	cout << a._value << endl;
-	cout << a._left->_value << endl;
-	cout << a._right->_value << endl;
+	BTree MyTree;
+	MyTree.insert(8);
+	MyTree.insert(6);
+	MyTree.insert(4);
+	MyTree.insert(9);
+
+	MyTree.print();
 
 	return 0;
 }
