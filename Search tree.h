@@ -26,7 +26,7 @@ namespace tree {
 		Node* copyTree(Node* node);
 		BTree& operator=(BTree lhs);
 
-		void printRecursive(Node* node);
+		void printRecursive(Node* node, int key);
 		void print();
 
 		bool insertRecursive(Node*& node, int key);
@@ -64,16 +64,22 @@ namespace tree {
 		return *this;
 	}
 
-	void BTree::printRecursive(Node* node) {
-		if (node) {
-			cout << node->_value << " ";
-			printRecursive(node->_left);
-			printRecursive(node->_right);
+	void BTree::printRecursive(Node* node, int l) {
+		int i;
+		if (node != nullptr) {
+			printRecursive(node->_right, l + 1);
+
+			for (i = 1; i <= l; i++)
+				std::cout << "   ";
+
+			std::cout << node->_value << std::endl;
+
+			printRecursive(node->_left, l + 1);
 		}
 	}
 
 	void BTree::print() {
-		printRecursive(_root);
+		printRecursive(_root, 0);
 	}
 
 	bool BTree::insertRecursive(Node*& node, int key) {
