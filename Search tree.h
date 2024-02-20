@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include <iomanip>
+
 using namespace std;
 namespace tree {
 
@@ -32,10 +33,13 @@ namespace tree {
 		bool insertRecursive(Node*& node, int key);
 		bool insert(int key);
 
+		bool containsRecursive(Node* node, int key);
 		bool contains(int key);
 
+		bool eraseRecursive(Node*& node, int key);
 		bool erase(int key);
 
+		Node* minValueNode(Node* node);
 	};
 
 	void BTree::destroyTree(Node* node) {
@@ -113,13 +117,59 @@ namespace tree {
 		return insertRecursive(_root, key);
 	}
 
+	bool BTree::containsRecursive(Node* node, int key) {
+		if (!node)
+			return false;
+
+		if (node->_value == key)
+			return true;
+
+		if (key < node->_value)
+			return containsRecursive(node->_left, key);
+		else
+			return containsRecursive(node->_right, key);
+	}
+
 	bool BTree::contains(int key) {
-		return true;
+		return containsRecursive(_root, key);
+	}
+
+	bool BTree::eraseRecursive(Node*& node, int key) {
+		if (!node)
+			return false;
+
+		if (key < node->_value)
+			return eraseRecursive(node->_left, key);
+		else if (key > node->_value)
+			return eraseRecursive(node->_right, key);
+		else {
+			if (!node->_left) {
+				Node* temp = node->_right;
+				delete node;
+				node = temp;
+			}
+			else if (!node->_right) {
+				Node* temp = node->_left;
+				delete node;
+				node = temp;
+			}
+			else {
+				Node* temp = minValueNode(node->_right);
+				node->_value = temp->_value;
+				eraseRecursive(node->_right, temp->_value);
+			}
+			return true;
+		}
 	}
 
 	bool BTree::erase(int key) {
-		return true;
+		return eraseRecursive(_root, key);
 	}
 
+	Node* BTree::minValueNode(Node* node) {
+		Node* current = node;
+		while (current && current->_left)
+			current = current->_left;
+		return current;
+	}
 }
-
