@@ -21,11 +21,19 @@ void tests() {
 	for (int i = 0; i < 20; i += 2) {
 		set.erase(i);
 	}
-	if(set.insert(2))cout << '\n' << "aboba" << '\n';
+	if (set.insert(2))cout << '\n' << "aboba" << '\n';
 	set.print();
 }
 
-int main(){
-	tests();
+int main() {
+
+	std::vector<int> input = { 3, 2, 2, 4 };
+	std::vector<int> result = get_unique(input);
+
+	for (int value : result) {
+		std::cout << value << " ";
+	}
+	std::cout << std::endl;
+
 	return 0;
 }

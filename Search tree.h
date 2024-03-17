@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include <iomanip>
+#include <vector>
 
 using namespace std;
 namespace tree {
@@ -25,7 +26,7 @@ namespace tree {
 		~BTree();
 
 		Node* copyTree(Node* node);
-		BTree& operator=(BTree lhs);
+		BTree& operator=(const BTree lhs);
 
 		void printRecursive(Node* node, int key);
 		void print();
@@ -40,6 +41,12 @@ namespace tree {
 		bool erase(int key);
 
 		Node* minValueNode(Node* node);
+
+		Node* getRoot() const { return _root; }
+
+		vector<int> to_vector();
+
+		void to_vector(Node* ptr, vector<int>& vec);
 	};
 
 	void BTree::destroyTree(Node* node) {
@@ -171,5 +178,40 @@ namespace tree {
 		while (current && current->_left)
 			current = current->_left;
 		return current;
+	}
+
+	vector<int> BTree::to_vector() {
+		vector<int> vec;
+		to_vector(_root, vec);
+		return vec;
+	}
+
+	void BTree::to_vector(Node* ptr, vector<int>& vec) {
+		if (!ptr) {
+			return;
+		}
+		vec.push_back(ptr->_value);
+		to_vector(ptr->_left, vec);
+		to_vector(ptr->_right, vec);
+	}
+
+	vector<int> get_unique(vector<int> vec) {
+		auto set_repeat = BTree();
+		auto set_unique = BTree();
+
+		for (auto i : vec) {
+			if (!set_unique.contains(i) && !set_repeat.contains(i)) {
+				set_unique.insert(i);
+			}
+			else {
+				if (set_unique.contains(i) && !set_repeat.contains(i)) {
+					set_unique.erase(i);
+					set_repeat.insert(i);
+				}
+			}
+		}
+
+		vector<int> unique = set_unique.to_vector();
+		return unique;
 	}
 }
